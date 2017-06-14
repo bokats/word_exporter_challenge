@@ -1,6 +1,7 @@
 import requests, json
 from docx import Document
 from math import ceil
+from docx.shared import RGBColor
 
 class WordExporter(object):
     def __init__(self, transcript_id, API_key):
@@ -16,9 +17,15 @@ class WordExporter(object):
     def write_transcript_to_file(self, content):
         for message in content:
             raw_time = message['result'][0]['alternative'][0]['words'][0]['from']
-            print(raw_time)
             time = self.reformat_time(raw_time)
-            print(time)
+            sentence = message['result'][0]['alternative'][0]['transcript']
+            line = self.word_file.add_paragraph()
+            time_runner = line.add_run(time)
+            time_runner.bold = True
+            font = time_runner.font
+            font.color.rgb = RGBColor(0x42, 0x24, 0xE9)
+            line.add_run("                   ")
+            line.add_run(sentence)
 
         self.word_file.save('test.docx')
 
