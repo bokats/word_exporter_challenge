@@ -6,21 +6,22 @@ class WordExporter(object):
     def __init__(self, transcript_id, API_key):
         self.API_response = self.get_transcript_from_API(transcript_id, API_key)
         self.word_file = Document()
-        self.process_response()
+        self.error_code = None
+        self.process_response(transcript_id)
 
     def get_transcript_from_API(self, transcript_id, API_key):
         url = 'https://api.capio.ai/v1/speech/transcript/' + transcript_id
         headers = {'apiKey': API_key}
         return requests.get(url, headers=headers)
 
-    def process_response(self):
+    def process_response(self, transcript_id):
         if self.API_response.status_code == 200:
             self.API_response = self.API_response.json()
             self.write_transcript_to_file(10)
+            self.word_file.save(transcript_id + '.docx')
         else:
-            print('Request could not be completed. Please check your API \
-            key and/or transcript id')
-            print('Error code: ' + str(self.API_response.status_code))
+            self.error_code = str(self.API_response.status_code)
+            return self.error_code
 
     def write_transcript_to_file(self, space_after_timestamp):
         for sentence in self.API_response:
@@ -39,16 +40,17 @@ class WordExporter(object):
                     font = word_runner.font
                     font.color.rgb = RGBColor(0xFF, 0x00, 0x00)
 
-        self.word_file.save('test.docx')
+        return True
 
     def reformat_time(self, raw_time):
+        raw_time = float(format(raw_time, '.2f'))
         hours = int(raw_time / 3600)
         raw_time -= hours * 3600
         minutes = int(raw_time / 60)
         raw_time -= minutes * 60
         seconds = int(raw_time)
         raw_time = format(raw_time - seconds, '.2f')
-        centiseconds = int(raw_time[2:])
+        centiseconds = int(str(raw_time)[2:])
 
         if hours < 10:
             formatted_hours = '0' + str(hours)
@@ -70,4 +72,5 @@ class WordExporter(object):
         return formatted_hours + ":" + formatted_minutes + ":" + formatted_seconds \
         + '.' + formatted_centiseconds
 
-w = WordExporter('593f237fbcae700012ba8fcd', '262ac9a0c9ba4d179aad4c0b9b02120a')
+w = WordExporter('593f23', '262ac9a0c9ba4d179aad4c0b9b02120a')
+# print(w.reformat_time(122.598))
