@@ -1,6 +1,5 @@
 from word_exporter import WordExporter
-import docx
-from docx.shared import RGBColor
+from docx import Document
 
 class WordExporterTests(object):
 
@@ -36,8 +35,35 @@ class WordExporterTests(object):
         if w.reformat_time(3599.998) != '01:00:00.00':
             print('Time reformatting test fail', 3599.998)
 
+    def check_data_integrity(self):
+        w = WordExporter('593f237fbcae700012ba8fcd', '262ac9a0c9ba4d179aad4c0b9b02120a')
+        doc = Document('593f237fbcae700012ba8fcd.docx')
+
+        if not doc:
+            print('No document created test fail')
+            return
+
+        if len(w.API_response) != len(doc.paragraphs):
+            print('Number of lines mismatch test fail')
+            return
+
+        index = 0
+        for paragraph in doc.paragraphs:
+            paragraph = paragraph.text.split(" " * 10)
+            timestamp = w.API_response[index]['result'][0]['alternative'][0]['words'][0]['from']
+            if w.reformat_time(timestamp) != paragraph[0]:
+                print('Time data mismatch', timestamp)
+
+            sentence = w.API_response[index]['result'][0]['alternative'][0]['transcript']
+            if sentence != paragraph[1][:-1]:
+                print('Sentence data mismatch', sentence)
+            index += 1
+
+    def run_tests(self):
+        self.test_correct_API_call()
+        self.test_incorrect_API_key()
+        self.test_time_reformatting()
+        self.check_data_integrity()
 
 t = WordExporterTests()
-t.test_correct_API_call()
-t.test_incorrect_API_key()
-t.test_time_reformatting()
+t.run_tests()

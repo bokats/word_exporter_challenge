@@ -72,5 +72,4 @@ class WordExporter(object):
         return formatted_hours + ":" + formatted_minutes + ":" + formatted_seconds \
         + '.' + formatted_centiseconds
 
-w = WordExporter('593f23', '262ac9a0c9ba4d179aad4c0b9b02120a')
-# print(w.reformat_time(122.598))
+WordExporter('593f237fbcae700012ba8fcd', '262ac9a0c9ba4d179aad4c0b9b02120a')
