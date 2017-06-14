@@ -18,14 +18,18 @@ class WordExporter(object):
         for message in content:
             raw_time = message['result'][0]['alternative'][0]['words'][0]['from']
             time = self.reformat_time(raw_time)
-            sentence = message['result'][0]['alternative'][0]['transcript']
             line = self.word_file.add_paragraph()
             time_runner = line.add_run(time)
             time_runner.bold = True
             font = time_runner.font
             font.color.rgb = RGBColor(0x42, 0x24, 0xE9)
-            line.add_run("                   ")
-            line.add_run(sentence)
+
+            line.add_run(" " * 10)
+            for word in message['result'][0]['alternative'][0]['words']:
+                word_runner = line.add_run(word['word'] + " ")
+                if word['confidence'] < 0.75:
+                    font = word_runner.font
+                    font.color.rgb = RGBColor(0xFF, 0x00, 0x00)
 
         self.word_file.save('test.docx')
 
