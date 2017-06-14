@@ -1,31 +1,39 @@
 import requests, json
 from docx import Document
-from math import ceil
 from docx.shared import RGBColor
 
 class WordExporter(object):
     def __init__(self, transcript_id, API_key):
         self.API_response = self.get_transcript_from_API(transcript_id, API_key)
         self.word_file = Document()
-        self.write_transcript_to_file(self.API_response)
+        self.process_response()
 
     def get_transcript_from_API(self, transcript_id, API_key):
         url = 'https://api.capio.ai/v1/speech/transcript/' + transcript_id
         headers = {'apiKey': API_key}
-        return requests.get(url, headers=headers).json()
+        return requests.get(url, headers=headers)
 
-    def write_transcript_to_file(self, content):
-        for message in content:
-            raw_time = message['result'][0]['alternative'][0]['words'][0]['from']
-            time = self.reformat_time(raw_time)
+    def process_response(self):
+        if self.API_response.status_code == 200:
+            self.API_response = self.API_response.json()
+            self.write_transcript_to_file(10)
+        else:
+            print('Request could not be completed. Please check your API \
+            key and/or transcript id')
+            print('Error code: ' + str(self.API_response.status_code))
+
+    def write_transcript_to_file(self, space_after_timestamp):
+        for sentence in self.API_response:
             line = self.word_file.add_paragraph()
-            time_runner = line.add_run(time)
+
+            raw_time = sentence['result'][0]['alternative'][0]['words'][0]['from']
+            time = self.reformat_time(raw_time)
+            time_runner = line.add_run(time + " " * space_after_timestamp)
             time_runner.bold = True
             font = time_runner.font
             font.color.rgb = RGBColor(0x42, 0x24, 0xE9)
 
-            line.add_run(" " * 10)
-            for word in message['result'][0]['alternative'][0]['words']:
+            for word in sentence['result'][0]['alternative'][0]['words']:
                 word_runner = line.add_run(word['word'] + " ")
                 if word['confidence'] < 0.75:
                     font = word_runner.font
