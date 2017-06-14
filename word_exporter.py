@@ -1,11 +1,12 @@
 import requests, json
 from docx import Document
+from math import ceil
 
 class WordExporter(object):
     def __init__(self, transcript_id, API_key):
         self.API_response = self.get_transcript_from_API(transcript_id, API_key)
         self.word_file = Document()
-        # self.write_transcript_to_file(self.API_response)
+        self.write_transcript_to_file(self.API_response)
 
     def get_transcript_from_API(self, transcript_id, API_key):
         url = 'https://api.capio.ai/v1/speech/transcript/' + transcript_id
@@ -15,7 +16,9 @@ class WordExporter(object):
     def write_transcript_to_file(self, content):
         for message in content:
             raw_time = message['result'][0]['alternative'][0]['words'][0]['from']
-            self.word_file.add_paragraph(time)
+            print(raw_time)
+            time = self.reformat_time(raw_time)
+            print(time)
 
         self.word_file.save('test.docx')
 
@@ -25,8 +28,8 @@ class WordExporter(object):
         minutes = int(raw_time / 60)
         raw_time -= minutes * 60
         seconds = int(raw_time)
-        raw_time -= seconds
-        centiseconds = int(raw_time * 100)
+        raw_time = format(raw_time - seconds, '.2f')
+        centiseconds = int(raw_time[2:])
 
         if hours < 10:
             formatted_hours = '0' + str(hours)
@@ -40,7 +43,6 @@ class WordExporter(object):
             formatted_seconds = '0' + str(seconds)
         else:
             formatted_seconds = str(seconds)
-
         if centiseconds < 10:
             formatted_centiseconds = '0' + str(centiseconds)
         else:
@@ -50,4 +52,3 @@ class WordExporter(object):
         + '.' + formatted_centiseconds
 
 w = WordExporter('593f237fbcae700012ba8fcd', '262ac9a0c9ba4d179aad4c0b9b02120a')
-print(w.reformat_time(0.6523523532))
