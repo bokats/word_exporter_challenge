@@ -50,7 +50,8 @@ class WordExporterTests(object):
         index = 0
         for paragraph in doc.paragraphs:
             paragraph = paragraph.text.split(" " * 10)
-            timestamp = w.API_response[index]['result'][0]['alternative'][0]['words'][0]['from']
+            timestamp = w.API_response[index]['result'][0]['alternative'][0]\
+            ['words'][0]['from']
             if w.reformat_time(timestamp) != paragraph[0]:
                 print('Time data mismatch', timestamp)
 
