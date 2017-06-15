@@ -9,11 +9,12 @@ The program is written in Python3 and utilizes three main libraries:
 
 To run the program:
 1. Clone the repo.
-2. Run requirements.txt in your terminal. This will install python-docx.
+2. Run `requirements.txt` in your terminal. This will install python-docx.
+3. Go to the `program_script` folder in the repo.
 3. There are two options to run the program:
-    - At the bottom of word_exporter.py, add a line calling the WordExporter object. For example: WordExporter(<API key>, <transaction_id).
-    - Run python3 in your terminal and then run WordExporter(<API key>, <transaction_id).
+    - At the bottom of word_exporter.py, add a line calling the WordExporter object. For example: `WordExporter(<API key>, <transaction_id)`.
+    - Run python3 in your terminal and then run `WordExporter(<API key>, <transaction_id)`.
 
 Please note if incorrect API key and/or transaction id is provided, the program will return the error code provided by the API.
 
-tests.py includes the tests written for this program. To run the tests, run 'python3 tests.py' in your terminal. If any test fails, a print statement will be printed in the terminal window, specifying the type of test failed and the specific test case.
+In the `program_script` folder, `tests.py` includes the tests written for this program. To run the tests, run `python3 tests.py` in your terminal. If any test fails, a print statement will be printed in the terminal window, specifying the type of test failed and the specific test case. If no tests fail, nothing will be printed.
