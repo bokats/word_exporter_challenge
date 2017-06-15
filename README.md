@@ -1,10 +1,10 @@
 ## Word Exporter Challenge
 
-This repo makes a call to Capio's API, given an API key and transaction id, creates a new MS Word file, and writes the information provided from the response in the form of a timestamp indicating when the specific sentence started, and the actual sentence. The program also marks words with less than 75% confidence, as indicated by the API response, in red.
+This repo makes a call to Capio's API, given an API key and transaction id, creates a new MS Word file, and writes the information provided from the response in the form of a timestamp indicating when the specific sentence started, and the actual sentence. The program also marks words with less than 75% confidence, as indicated by the response, in red.
 
-## Set up and execution instructions
+### Set up and execution instructions
 The program is written in Python3 and utilizes three main libraries:
-1. requests - makes http request to Capio's API
+1. requests - makes HTTP request to Capio's API
 2. json - turns the API response into more manageable json format
 3. python-docx - used to write the information into a MS Word file
 
@@ -15,7 +15,7 @@ To run the program:
 3. There are two options to run the program:
     - At the bottom of `word_exporter.py`, add a line calling the WordExporter object.  For example: `WordExporter(<transaction_id>, <API key>)`. Then run `python3 word_exporter.py` in the terminal.
     - In the terminal, run `python3`, then once in the python3 console run `from word_exporter import WordExporter`, then run `WordExporter(<transaction_id>, <API key>)`.
-4. Once the program is executed properly, there will be a MS Word file named after the transaction id saved in the same directory with the correct information from the API call.
+4. Once the program is executed properly, there will be a MS Word file named after the transaction id saved in the same directory with the correct information from the API response.
 
 Please note if incorrect API key and/or transaction id is provided, the program will return the error code from the response.
 
