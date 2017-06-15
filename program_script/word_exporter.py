@@ -35,7 +35,7 @@ class WordExporter(object):
             font.color.rgb = RGBColor(0x42, 0x24, 0xE9)
 
             for word in sentence['result'][0]['alternative'][0]['words']:
-                word_runner = line.add_run(word['word'] + " ")
+                word_runner = line.add_run(word['word'] + ' ')
                 if word['confidence'] < 0.75:
                     font = word_runner.font
                     font.color.rgb = RGBColor(0xFF, 0x00, 0x00)
@@ -69,5 +69,5 @@ class WordExporter(object):
         else:
             formatted_centiseconds = str(centiseconds)
 
-        return formatted_hours + ":" + formatted_minutes + ":" + formatted_seconds \
+        return formatted_hours + ':' + formatted_minutes + ':' + formatted_seconds \
         + '.' + formatted_centiseconds
