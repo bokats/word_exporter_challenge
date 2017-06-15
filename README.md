@@ -5,12 +5,12 @@ This repo makes a call to Capio's API, given an API key and transaction id, crea
 ### Set up and execution instructions
 The program is written in Python3 and utilizes three main libraries:
 1. requests - makes HTTP request to Capio's API
-2. json - turns the API response into more manageable json format
+2. simplejson - turns the API response into more manageable json format
 3. python-docx - used to write the information into a MS Word file
 
 To run the program:
 1. Clone the repo.
-2. Run `requirements.txt` in your terminal. This will install python-docx and requests.
+2. Run `requirements.txt` in your terminal. This will install python-docx, requests and simplejson.
 3. Go to the `program_script` folder in the repo.
 3. There are two options to run the program:
     - At the bottom of `word_exporter.py`, add a line calling the WordExporter object.  For example: `WordExporter(<transaction_id>, <API key>)`. Then run `python3 word_exporter.py` in the terminal.
